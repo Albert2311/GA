@@ -1,0 +1,7 @@
+{
+    "require": {
+        "spomky-labs/otphp": "^11.2",
+        "sonata-project/google-authenticator": "^2.3",
+        "phpseclib/mcrypt_compat": "^2.0"
+    }
+}
