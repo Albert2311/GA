@@ -11,14 +11,31 @@ if (!isset($_SESSION['auth_secret'])) {
     $_SESSION['auth_secret'] = $secret;
 }
 
-
+//test 
+$privatekey = $_SESSION['auth_secret'];
+//test end
 $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
-
+$code = $Authenticator->getCode($_SESSION['auth_secret']);
 
 if (!isset($_SESSION['failed'])) {
     $_SESSION['failed'] = false;
 }
-//end
+//     //end
+    //test
+
+    // $Authenticator = new Authenticator();
+    // use OTPHP\TOTP;
+    // require 'vendor/autoload.php';
+    // $otp = TOTP::generate();
+    // $secret2 = $otp->getSecret();
+    // echo " The OTP secret2 is:{$secret2}\n";
+    
+    // $otp = TOTP::createFromSecret($secret2);
+    // echo "The current OTP is: {$otp->now()}\n";
+    
+    // $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $secret2);
+
+    //end test
     // Store All Errors
     $errors = [];
 
@@ -26,7 +43,9 @@ if (!isset($_SESSION['failed'])) {
     if (isset($_POST['signup'])) {
         $name = mysqli_real_escape_string($conn, $_POST['name']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
-
+        //test
+        $_SESSION['email'] = $email;
+        //end tesst
         // check password length if password is less then 8 character so
         if (strlen(trim($_POST['password'])) < 8) {
             $errors['password'] = 'Sử dụng 8 ký tự trở lên bao gồm các chữ cái, số và ký hiệu(@,#,...)';
@@ -55,14 +74,14 @@ if (!isset($_SESSION['failed'])) {
         // count erros
         if (count($errors) === 0) {
             $insertQuery = "INSERT INTO users (name,email,password,code,status)
-            VALUES ('$name','$email','$password','$qrCodeUrl','$status')";
+            VALUES ('$name','$email','$password','$privatekey','$status')";
             $insertInfo = mysqli_query($conn, $insertQuery);
 
             // Send Varification Code In Gmail
             if ($insertInfo) {
                 // Configure Your Server To Send Mail From Local Host Link In Video Description (How To Config LocalHost Server)
                 $subject = 'Mã xác minh email';
-                $message = "Mã xác minh của bạn là $qrCodeUrl";
+                $message = "Mã xác minh của bạn là $code";
                 $sender = 'From: nguyetanh.23112002@gmail.com';
 
                 if (mail($email, $subject, $message, $sender)) {
@@ -78,6 +97,51 @@ if (!isset($_SESSION['failed'])) {
             }
         }
     }
+    // end signup
+
+    // redend otp
+    if (isset($_POST['resending'])) {
+        if(!isset($_SESSION['email'])){
+            $errors['ErrorEmail'] = "Không tìm thấy email";
+        }else{
+            $email = $_SESSION['email'];
+            // $_SESSION['email'] = $email;
+    
+            $emailCheckQuery = "SELECT * FROM users WHERE email = '$email'";
+            $emailCheckResult = mysqli_query($conn, $emailCheckQuery);
+    
+            // if query run
+            if ($emailCheckResult) {
+                // if email matched
+                if (mysqli_num_rows($emailCheckResult) > 0) {
+                    $updateQuery = "UPDATE users SET code = '$qrCodeUrl' WHERE email = '$email'";
+                    $updateResult = mysqli_query($conn, $updateQuery);
+                    if ($updateResult) {
+                        $subject = 'Mã xác minh email';
+                        $message = "Mã xác minh của bạn là $code";
+                        $sender = 'From: shopbiutyphun@gmail.com';
+    
+                        if (mail($email, $subject, $message, $sender)) {
+                            $message = "Đã gửi mã xác minh đến Email của bạn <br> $email";
+    
+                            $_SESSION['message'] = $message;
+                            header('location: codeQR.php');
+                        } else {
+                            $errors['otp_errors'] = 'Gửi mã không thành công!';
+                        }
+                    } else {
+                        $errors['db_errors'] = "Chèn dữ liệu không thành công!";
+                    }
+                }else{
+                    $errors['invalidEmail'] = "Địa chỉ email không hợp lệ";
+                }
+            }else {
+                $errors['db_error'] = "Kiểm tra email từ cơ sở dữ liệu không thành công!";
+            }
+        }
+        
+    }
+    // end redend otp
 
     // if Verify Button Clicked
     if (isset($_POST['verify'])) {
@@ -157,7 +221,7 @@ if (!isset($_SESSION['failed'])) {
                 $updateResult = mysqli_query($conn, $updateQuery);
                 if ($updateResult) {
                     $subject = 'Mã xác minh email';
-                    $message = "Mã xác minh của bạn là $qrCodeUrl";
+                    $message = "Mã xác minh của bạn là $code";
                     $sender = 'From: nguyetanh.23112002@gmail.com';
 
                     if (mail($email, $subject, $message, $sender)) {

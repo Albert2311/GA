@@ -1,25 +1,21 @@
-<!-- <?php include_once ("controller2.php"); ?> -->
 <?php
-session_start();
+// session_start();
 
+// require "Authenticator.php";
+include_once ("controller2.php");
+// if ($_SERVER['REQUEST_METHOD'] != "POST") {
+//     header("location: CodeQR.php");
+//     die();
+// }
+// $Authenticator = new Authenticator();
 
-require "Authenticator.php";
-if ($_SERVER['REQUEST_METHOD'] != "POST") {
-    header("location: index.php");
-    die();
-}
-$Authenticator = new Authenticator();
+// $checkResult = $Authenticator->verifyCode($_SESSION['auth_secret'], $_POST['code'], 2);    // 2 = 2*30sec clock tolerance
 
-
-
-
-$checkResult = $Authenticator->verifyCode($_SESSION['auth_secret'], $_POST['code'], 2);    // 2 = 2*30sec clock tolerance
-
-if (!$checkResult) {
-    $_SESSION['failed'] = true;
-    header("location: index.php");
-    die();
-} 
+// if (!$checkResult) {
+//     $_SESSION['failed'] = true;
+//     header("location: CodeQR.php");
+//     die();
+// } 
 
 
 ?>
@@ -89,15 +85,15 @@ if (!$checkResult) {
                         
                         <form action="index.php" method="post" autocomplete="off">
                         <?php
-                            if($errors > 0){
-                                foreach($errors AS $displayErrors){
-                                ?>
-                                <div id="alert">
-                                    <?php echo $displayErrors ?>
-                                </div>
-                                <?php
-                                }
-                            }
+                            // if($errors > 0){
+                            //     foreach($errors AS $displayErrors){
+                            //     ?>
+                            //     <div id="alert">
+                            //         <?php echo $displayErrors ?>
+                            //     </div>
+                            //     <?php
+                            //     }
+                            // }
                             ?>
                             <input type="email" name="email" class="input" placeholder="Enter Your Email" required>
                             <input type="password" name="password" class="input" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>

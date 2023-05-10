@@ -1,6 +1,8 @@
 <?php
-
-
+    //test
+    // use OTPHP\TOTP;
+    // require 'vendor/autoload.php';
+    //end test
 class Authenticator
 {
     protected $length = 6;
@@ -39,6 +41,12 @@ class Authenticator
         }
 
         return $secret;
+
+    //test
+    // $otp = TOTP::generate();
+    // $secret = $otp->getSecret();
+    // return $secret;
+    //end test
     }
 
 
@@ -62,6 +70,11 @@ class Authenticator
         $modulo = pow(10, $this->length);
 
         return str_pad($value % $modulo, $this->length, '0', STR_PAD_LEFT);
+
+        //test 
+        // $code = TOTP::createFromSecret($secret);
+        // return $code->now();
+        //end test
     }
 
 

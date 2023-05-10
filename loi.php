@@ -1,44 +1,40 @@
 <?php
+session_start();
+require "Authenticator.php";
+
+$Authenticator = new Authenticator();
+
+// if (!isset($_SESSION['auth_secret'])) {
+//     $secret = $Authenticator->generateRandomSecret();
+//     $_SESSION['auth_secret'] = $secret;
+// }
+
+// $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
+//test---------------------
 use OTPHP\TOTP;
 require 'vendor/autoload.php';
-// A random secret will be generated from this.
-// You should store the secret with the user for verification.
-$otp = TOTP::generate();
-$secret = $otp->getSecret();
-// echo "The OTP secret is: {$otp->getSecret()}\n";
-echo " The OTP secret is:{$secret}\n";
+if (!isset($_SESSION['auth_secret2'])) {
+    $otp = TOTP::generate();
+    $secret2 = $otp->getSecret();
+    $_SESSION['auth_secret2'] = $secret2;
+}
 
-$otp = TOTP::createFromSecret($secret);
+
+// echo " The OTP secret2 is:{$_SESSION['auth_secret2']}\n";
+
+$otp = TOTP::createFromSecret($_SESSION['auth_secret2']);
 echo "The current OTP is: {$otp->now()}\n";
 
-// // Note: You must set label before generating the QR code
-$otp->setLabel('Label of your web');
-// //
-require "Authenticator.php";
-$Authenticator = new Authenticator();
-$qrCodeUrl = $Authenticator->getQR('myPHPnotes', $secret);
+$qrCodeUrl2 = $Authenticator->getQR('myPHPnotes',$_SESSION['auth_secret2']);
+// echo "<img src='{$qrCodeUrl2}'>";
+// code ban dau
+// $code = $Authenticator->getCode($_SESSION['auth_secret']);
+// echo "secret1:".$_SESSION['auth_secret'];
+// echo "code1: " .$code;
+// echo "<img src='{$qrCodeUrl}'>";
+
+//end test---------------------------------------
 if (!isset($_SESSION['failed'])) {
     $_SESSION['failed'] = false;
 }
-//test
-// $input = $_GET['otp'];
-
-// $otp = TOTP::createFromSecret($secret); // create TOTP object from the secret.
-// $otp->verify($input); // Returns true if the input is verified, otherwise false.
-// $check = $otp->verify($input);
-// if($check){
-//     header('location: home.php');
-// }else{
-//     header('location: codeQR.php');
-// }
-//end test
-//
-// $grCodeUri = $otp->getQrCodeUri(
-//     'https://chart.googleapis.com/chart?chs=qr&chs=300x300&chl=[DATA]&ecc=M',
-//     '[DATA]'
-// );
-echo "<img src='{$qrCodeUrl}'>";
-
-// $otp = TOTP::createFromSecret($secret); // create TOTP object from the secret.
-// $otp->verify($input); // Returns true if the input is verified, otherwise false.
-// ?>
+?>

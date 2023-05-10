@@ -1,4 +1,8 @@
-<?php include_once ("controller2.php"); ?>
+<?php include_once ("controller2.php"); 
+//test
+// echo $_SESSION['email'];
+//end test
+?>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -18,7 +22,21 @@
     <!--//Style-CSS -->
 
     <script src="https://kit.fontawesome.com/af562a2a63.js" crossorigin="anonymous"></script>
-
+    <style>
+        #alert
+        {
+            height: auto;
+            width: 100%;
+            background: #ee05503b;
+            padding: 0 15px;
+            font-size: 19px;
+            line-height: 40px;
+            margin: 10px 0;
+            color: #000;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>

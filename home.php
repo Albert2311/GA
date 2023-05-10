@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 require "Authenticator.php";
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
     header("location: codeQR.php");
@@ -49,5 +48,8 @@ if (!$checkResult) {
 </head>
 <body  class="bg">
         welcome home
+        <a href="logout.php" class="header__navbar-icon-link">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <p>Đăng xuất</p></a>
 </body>
 </html>
