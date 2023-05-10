@@ -74,7 +74,7 @@ if (!isset($_SESSION['failed'])) {
         // count erros
         if (count($errors) === 0) {
             $insertQuery = "INSERT INTO users (name,email,password,code,status)
-            VALUES ('$name','$email','$password','$privatekey','$status')";
+            VALUES ('$name','$email','$password','$code','$status')";
             $insertInfo = mysqli_query($conn, $insertQuery);
 
             // Send Varification Code In Gmail
