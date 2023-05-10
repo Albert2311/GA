@@ -36,6 +36,7 @@ $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
 // echo "code1: " .$code;
 // echo "<img src='{$qrCodeUrl}'>";
 // echo $_SESSION['email'];
+
 //end test---------------------------------------
 if (!isset($_SESSION['failed'])) {
     $_SESSION['failed'] = false;
@@ -57,6 +58,7 @@ if (!isset($_SESSION['failed'])) {
         <!--/Style-CSS -->
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
         <!--//Style-CSS -->
+        
     <style>
         /* #alert
         {
@@ -87,16 +89,7 @@ if (!isset($_SESSION['failed'])) {
                         </div>
                     </div>
                     <div class="content-wthree" style="text-align: center;">
-                        <h2 >Nhập mã OTP</h2>
-                        <!-- thong bao loi -->
-                        <?php
-                            if(isset($_SESSION['message'])){
-                            ?>
-                            <div id="alert" class="alert alert-dismissible fade show" role="alert" style="color:#0275d8; background:#bde0fe">
-                            <?php echo $_SESSION['message']; ?> 
-                            <!-- <script><?php echo $_SESSION['message']; ?></script> -->
-                            </div>
-                        <?php } ?>
+                         <!-- thong bao loi -->
                         <?php
                             if($errors > 0){
                                 foreach($errors AS $displayErrors){
@@ -110,8 +103,10 @@ if (!isset($_SESSION['failed'])) {
                         }
                         ?>
                         <!-- end thong bao loi -->
+                        
                         <!-- form -->
-                        <form action="home.php" method="post">    
+                        <form action="codeQR.php" method="post">    
+                            <h2 >Nhập mã OTP</h2>
                             <div style="text-align: center;">
                                 <?php if ($_SESSION['failed']): ?>
                                     <div class="alert alert-danger" role="alert">
@@ -121,15 +116,15 @@ if (!isset($_SESSION['failed'])) {
                                         $_SESSION['failed'] = false;
                                     ?>
                                 <?php endif ?>
-                                    <input type="text" class="form-control" name="code" placeholder="******" style="font-size: xx-large;width: 200px;border-radius: 0px;text-align: center;display: inline;color: #0275d8;"><br> <br>    
-                                    <button type="submit" class="btn btn-md btn-primary" style="width: 200px;border-radius: 0px;">Xác nhận</button>
+                                    <input type="text" class="form-control" name="otp" placeholder="******" style="font-size: xx-large;width: 200px;border-radius: 0px;text-align: center;display: inline;color: #0275d8;" required><br> <br>  
+
+                                    <button name="verify" type="submit" class="btn btn-md btn-primary" style="width: 200px;border-radius: 0px;">Xác nhận</button>
                             </div>
                         </form>
                         <!-- form -->
                         <!-- form 2 -->
                         <form action="codeQR.php" method="post">
                             <div class="social-icons">
-                                
                                 <!-- send back otp -->
                                 <input id ="resending" name="resending" type="submit" value="Chưa nhận được OTP?" class="btn btn-link" style="text-align: center;"></input>
                                 <!-- send back otp -->
@@ -142,8 +137,8 @@ if (!isset($_SESSION['failed'])) {
             <!-- //form -->
         </div>
     </section>
-    <script>
-    const inputs = document.querySelectorAll(".input");
+<script>
+const inputs = document.querySelectorAll(".input");
 function addcl(){
 	let parent = this.parentNode.parentNode;
 	parent.classList.add("focus");

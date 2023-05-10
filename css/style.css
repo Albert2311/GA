@@ -200,7 +200,7 @@ button:hover {
     flex-basis: 60%;
     -webkit-flex-basis: 60%;
     box-sizing: border-box;
-    padding: 3em 3.5em;
+    padding: 2.4em 3.5em;
     background: #fff;
     box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
     border-top-right-radius: 8px;

@@ -114,7 +114,7 @@ if (!isset($_SESSION['failed'])) {
             if ($emailCheckResult) {
                 // if email matched
                 if (mysqli_num_rows($emailCheckResult) > 0) {
-                    $updateQuery = "UPDATE users SET code = '$qrCodeUrl' WHERE email = '$email'";
+                    $updateQuery = "UPDATE users SET code = '$code' WHERE email = '$email'";
                     $updateResult = mysqli_query($conn, $updateQuery);
                     if ($updateResult) {
                         $subject = 'Mã xác minh email';
@@ -157,11 +157,11 @@ if (!isset($_SESSION['failed'])) {
             $update_status = "Đã xác minh";
             $update_code = 0;
 
-            $update_query = "UPDATE users SET status = '$update_status' , code = $update_code WHERE code = $fetch_code";
+            $update_query = "UPDATE users SET status = '$update_status' , code = $update_code WHERE code = $otp";
             $update_result = mysqli_query($conn, $update_query);
 
             if ($update_result) {
-                header('location: index.php');
+                header('location: home.php');
             } else {
                 $errors['db_error'] = "Không thể kết hợp dữ liệu trong cơ sở dữ liệu!";
             }
