@@ -74,8 +74,8 @@ if (!isset($_SESSION['failed'])) {
 
         // count erros
         if (count($errors) === 0) {
-            $insertQuery = "INSERT INTO users (name,email,password,code,status)
-            VALUES ('$name','$email','$password','$code','$status')";
+            $insertQuery = "INSERT INTO users (name,email,password,code)
+            VALUES ('$name','$email','$password','$code')";
             $insertInfo = mysqli_query($conn, $insertQuery);
             // Send Varification Code In Gmail
             if ($insertInfo) {
@@ -152,7 +152,7 @@ if (!isset($_SESSION['failed'])) {
         // lưu gia tri otp nhap trong button/input
         $_SESSION['otp'] = $otp;
         // end lưu gia tri otp nhap trong button/input
-        $otp_query = "SELECT * FROM users WHERE code = $otp";
+        $otp_query = "SELECT * FROM users WHERE code = '$otp'";
         $otp_result = mysqli_query($conn, $otp_query);
 
         if (mysqli_num_rows($otp_result) > 0) {
@@ -162,7 +162,7 @@ if (!isset($_SESSION['failed'])) {
             $update_status = "Đã xác minh";
             $update_code = 0;
 
-            $update_query = "UPDATE users SET status = '$update_status' , code = $update_code WHERE code = $otp";
+            $update_query = "UPDATE users SET status = '$update_status' , code = $update_code WHERE code = '$otp'";
             $update_result = mysqli_query($conn, $update_query);
 
             if ($update_result) {
@@ -194,13 +194,13 @@ if (!isset($_SESSION['failed'])) {
                 $_SESSION['name'] = $name;
                 $_SESSION['email'] = $fetchInfo['email'];
                 $_SESSION['password'] = $fetchInfo['password'];
-                if ($status === 'Đã xác minh') {
-                    header('location: home.php');
-                } else {
-                    $info = "Bạn vẫn chưa xác minh email của mình $email";
-                    $_SESSION['message'] = $info;
-                    header('location: codeQR.php');
-                }
+                // if ($status === 'Đã xác minh') {
+                //     header('location: home.php');
+                // } else {
+                //     $info = "Bạn vẫn chưa xác minh email của mình $email";
+                //     $_SESSION['message'] = $info;
+                //     header('location: codeQR.php');
+                // }
             } else {
                 $errors['email'] = 'Mật khẩu không đúng';
             }
