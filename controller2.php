@@ -77,7 +77,6 @@ if (!isset($_SESSION['failed'])) {
             $insertQuery = "INSERT INTO users (name,email,password,code,status)
             VALUES ('$name','$email','$password','$code','$status')";
             $insertInfo = mysqli_query($conn, $insertQuery);
-
             // Send Varification Code In Gmail
             if ($insertInfo) {
                 // Configure Your Server To Send Mail From Local Host Link In Video Description (How To Config LocalHost Server)
@@ -90,6 +89,7 @@ if (!isset($_SESSION['failed'])) {
 
                     $_SESSION['message'] = $message;
                     header('location: codeQR.php');
+
                 } else {
                     $errors['otp_errors'] = 'Gửi mã không thành công!';
                 }
@@ -100,6 +100,7 @@ if (!isset($_SESSION['failed'])) {
     }
     // end signup
 
+    //
     // redend otp
     if (isset($_POST['resending'])) {
         if(!isset($_SESSION['email'])){
@@ -205,6 +206,33 @@ if (!isset($_SESSION['failed'])) {
             }
         } else {
             $errors['email'] = 'Địa chỉ email không hợp lệ';
+        }
+
+        //
+        // count erros
+        if (count($errors) === 0) {
+            $update_code = 0;
+            $insertQuery = "UPDATE users SET code = $update_code WHERE code = $code";
+            $insertInfo = mysqli_query($conn, $insertQuery);
+            // Send Varification Code In Gmail
+            if ($insertInfo) {
+                // Configure Your Server To Send Mail From Local Host Link In Video Description (How To Config LocalHost Server)
+                $subject = 'Mã xác minh email';
+                $message = "Mã xác minh của bạn là $code";
+                $sender = 'From: nguyetanh.23112002@gmail.com';
+
+                if (mail($email, $subject, $message, $sender)) {
+                    $message = "Đã gửi mã xác minh đến Email của bạn <br> $email";
+
+                    $_SESSION['message'] = $message;
+                    header('location: codeQR.php');
+
+                } else {
+                    $errors['otp_errors'] = 'Gửi mã không thành công!';
+                }
+            } else {
+                $errors['db_errors'] = "Chèn dữ liệu không thành công";
+            }
         }
     }
 

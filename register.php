@@ -2,6 +2,29 @@
 //test
 // echo $_SESSION['email'];
 //end test
+//nhan nút nutton dangky thì sẽ kiểm tra
+// if(isset($_POST['signup'])){
+//     $email = mysqli_real_escape_string($conn, $_POST['email']);
+//     $password = md5($_POST['password']);
+
+//     $select = " SELECT * FROM users WHERE email = '$email' && password = '$password'";
+
+//     $result = mysqli_query($conn, $select);
+
+//     if(mysqli_num_rows($result) > 0){
+//         $row = mysqli_fetch_array($result);
+//         if($row['status'] == 'Đã xác minh'){
+//             header('location: home.php');
+
+//         }elseif($row['status'] == 'Chưa xác minh'){
+//             header('location: codeQR.php');
+//         }
+// }else{
+//         $error[] = 'Sai mật khẩu hoặc địa chỉ email';
+//     }
+// };
+//end nhan nút nutton verify thì sẽ kiểm tra
+//end test
 ?>
 <!DOCTYPE html>
 <html lang="zxx">

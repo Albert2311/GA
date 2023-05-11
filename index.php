@@ -20,28 +20,28 @@ include_once ("controller2.php");
 
 ?>
 <?php
-	if(isset($_POST['login'])){
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $password = md5($_POST['password']);
+	// if(isset($_POST['login'])){
+    //     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    //     $password = md5($_POST['password']);
 
-		$select = " SELECT * FROM users WHERE email = '$email' && password = '$password'";
+	// 	$select = " SELECT * FROM users WHERE email = '$email' && password = '$password'";
 
-		$result = mysqli_query($conn, $select);
+	// 	$result = mysqli_query($conn, $select);
 
-		if(mysqli_num_rows($result) > 0){
-			$row = mysqli_fetch_array($result);
-            if($row['status'] == 'Đã xác minh'){
-				// $_SESSION['admin_name'] = $row['fname'];
-				header('location:home.php');
+	// 	if(mysqli_num_rows($result) > 0){
+	// 		$row = mysqli_fetch_array($result);
+    //         if($row['status'] == 'Đã xác minh'){
+	// 			// $_SESSION['admin_name'] = $row['fname'];
+	// 			header('location: home.php');
 
-			}elseif($row['status'] == 'Chưa xác minh'){
-				// $_SESSION['admin_name'] = $row['fname'];
-				header('location: codeQR.php');
-			}
-	}else{
-			$error[] = 'Sai mật khẩu hoặc địa chỉ email';
-		}
-	};
+	// 		}elseif($row['status'] == 'Chưa xác minh'){
+	// 			// $_SESSION['admin_name'] = $row['fname'];
+	// 			header('location: codeQR.php');
+	// 		}
+	// }else{
+	// 		$error[] = 'Sai mật khẩu hoặc địa chỉ email';
+	// 	}
+	// };
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +63,21 @@ include_once ("controller2.php");
     <!--//Style-CSS -->
 
     <script src="https://kit.fontawesome.com/af562a2a63.js" crossorigin="anonymous"></script>
-
+    <style>
+        #alert
+        {
+            height: auto;
+            width: 100%;
+            background: #ee05503b;
+            padding: 0 15px;
+            font-size: 19px;
+            line-height: 40px;
+            margin: 10px 0;
+            color: #000;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
