@@ -1,10 +1,10 @@
 <?php 
-// include_once("controller2.php"); 
+include_once("controller2.php"); 
 ?>
 <?php
-session_start();
+// session_start();
 
-require "Authenticator.php";
+// require "Authenticator.php";
 if ($_SERVER['REQUEST_METHOD'] != "POST") {
     header("location: codeQR.php");
     die();

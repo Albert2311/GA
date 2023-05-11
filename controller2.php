@@ -209,10 +209,15 @@ if (!isset($_SESSION['failed'])) {
         }
 
         //
-        // count erros
+        // count erros (login)
         if (count($errors) === 0) {
-            $update_code = 0;
-            $insertQuery = "UPDATE users SET code = $update_code WHERE code = $code";
+            // $email = $_SESSION['email'];
+            // // $_SESSION['email'] = $email;
+    
+            // $emailCheckQuery = "SELECT * FROM users WHERE email = '$email'";
+            // $emailCheckResult = mysqli_query($conn, $emailCheckQuery);
+
+            $insertQuery = "UPDATE users SET code = $code WHERE email = '$email'";
             $insertInfo = mysqli_query($conn, $insertQuery);
             // Send Varification Code In Gmail
             if ($insertInfo) {
