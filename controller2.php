@@ -75,7 +75,7 @@ if (!isset($_SESSION['failed'])) {
         // count erros
         if (count($errors) === 0) {
             $insertQuery = "INSERT INTO users (name,email,password,code)
-            VALUES ('$name','$email','$password','$code')";
+            VALUES ('$name','$email','$password','$privatekey')";
             $insertInfo = mysqli_query($conn, $insertQuery);
             // Send Varification Code In Gmail
             if ($insertInfo) {
@@ -116,7 +116,7 @@ if (!isset($_SESSION['failed'])) {
             if ($emailCheckResult) {
                 // if email matched
                 if (mysqli_num_rows($emailCheckResult) > 0) {
-                    $updateQuery = "UPDATE users SET code = '$code' WHERE email = '$email'";
+                    $updateQuery = "UPDATE users SET code = '$privatekey' WHERE email = '$email'";
                     $updateResult = mysqli_query($conn, $updateQuery);
                     if ($updateResult) {
                         $subject = 'Mã xác minh email';
@@ -189,7 +189,7 @@ if (!isset($_SESSION['failed'])) {
             $password_check = mysqli_query($conn, $passwordQuery);
             if (mysqli_num_rows($password_check) > 0) {
                 $fetchInfo = mysqli_fetch_assoc($password_check);
-                $status = $fetchInfo['status'];
+                // $status = $fetchInfo['status'];
                 $name = $fetchInfo['name'];
                 $_SESSION['name'] = $name;
                 $_SESSION['email'] = $fetchInfo['email'];
@@ -217,7 +217,7 @@ if (!isset($_SESSION['failed'])) {
             // $emailCheckQuery = "SELECT * FROM users WHERE email = '$email'";
             // $emailCheckResult = mysqli_query($conn, $emailCheckQuery);
 
-            $insertQuery = "UPDATE users SET code = $code WHERE email = '$email'";
+            $insertQuery = "UPDATE users SET code = '$privatekey' WHERE email = '$email'";
             $insertInfo = mysqli_query($conn, $insertQuery);
             // Send Varification Code In Gmail
             if ($insertInfo) {
