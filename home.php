@@ -19,9 +19,11 @@
 include_once("controller2.php"); 
 $email = $_SESSION['email'];
 $password = $_SESSION['password'];
-
+$otp = $_SESSION['otp'];
 if($email != false && $password != false){
-    $query = " SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+    $query = " SELECT * FROM users WHERE email = '$email' AND password = '$password' and code = $otp";
+    // $query = " SELECT * FROM users WHERE email = '$email' AND code = '$otp'";
+
     $run_query = mysqli_query($conn , $query);
     if($run_query){
         $fetch_data = mysqli_fetch_assoc($run_query);
@@ -30,8 +32,6 @@ if($email != false && $password != false){
             header("location: codeQR.php");
         }
     }
-}else{
-    header('location: index.php');
 }
 //
 ?>

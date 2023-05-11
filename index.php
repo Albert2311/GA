@@ -20,29 +20,28 @@ include_once ("controller2.php");
 
 ?>
 <?php
-	// if(isset($_POST['login'])){
-    //     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    //     $password = md5($_POST['password']);
+	if(isset($_POST['login'])){
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $password = md5($_POST['password']);
 
-	// 	$select = " SELECT * FROM users WHERE email = '$email' && password = '$password'";
+		$select = " SELECT * FROM users WHERE email = '$email' && password = '$password'";
 
-	// 	$result = mysqli_query($conn, $select);
+		$result = mysqli_query($conn, $select);
 
-	// 	if(mysqli_num_rows($result) > 0){
-	// 		$row = mysqli_fetch_array($result);
+		if(mysqli_num_rows($result) > 0){
+			$row = mysqli_fetch_array($result);
+            if($row['status'] == 'Đã xác minh'){
+				// $_SESSION['admin_name'] = $row['fname'];
+				header('location:home.php');
 
-	// 		if($row['email'] == $email && $row['password'] == $password){
-	// 			// $_SESSION['admin_name'] = $row['fname'];
-	// 			header('location: loi.php');
-
-	// 		}elseif($row['email'] != $email){
-	// 			// $_SESSION['admin_name'] = $row['fname'];
-	// 			header('location: loi.php');
-	// 		}
-	// 	}else{
-	// 		$error[] = 'Sai mật khẩu hoặc địa chỉ email';
-	// 	}
-	// };
+			}elseif($row['status'] == 'Chưa xác minh'){
+				// $_SESSION['admin_name'] = $row['fname'];
+				header('location: codeQR.php');
+			}
+	}else{
+			$error[] = 'Sai mật khẩu hoặc địa chỉ email';
+		}
+	};
 ?>
 
 <!DOCTYPE html>
@@ -85,15 +84,15 @@ include_once ("controller2.php");
                         
                         <form action="index.php" method="post" autocomplete="off">
                         <?php
-                            // if($errors > 0){
-                            //     foreach($errors AS $displayErrors){
-                            //     ?>
-                            //     <div id="alert">
-                            //         <?php echo $displayErrors ?>
-                            //     </div>
-                            //     <?php
-                            //     }
-                            // }
+                            if($errors > 0){
+                                foreach($errors AS $displayErrors){
+                                ?>
+                                <div id="alert">
+                                    <?php echo $displayErrors ?>
+                                </div>
+                                <?php
+                                }
+                            }
                             ?>
                             <input type="email" name="email" class="input" placeholder="Enter Your Email" required>
                             <input type="password" name="password" class="input" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>

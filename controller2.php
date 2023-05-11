@@ -45,6 +45,7 @@ if (!isset($_SESSION['failed'])) {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         //test
         $_SESSION['email'] = $email;
+        $_SESSION['password'] = $password;
         //end tesst
         // check password length if password is less then 8 character so
         if (strlen(trim($_POST['password'])) < 8) {
@@ -147,6 +148,9 @@ if (!isset($_SESSION['failed'])) {
     if (isset($_POST['verify'])) {
         $_SESSION['message'] = "";
         $otp = mysqli_real_escape_string($conn, $_POST['otp']);
+        // lưu gia tri otp nhap trong button/input
+        $_SESSION['otp'] = $otp;
+        // end lưu gia tri otp nhap trong button/input
         $otp_query = "SELECT * FROM users WHERE code = $otp";
         $otp_result = mysqli_query($conn, $otp_query);
 

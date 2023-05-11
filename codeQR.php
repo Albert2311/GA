@@ -36,7 +36,7 @@ $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
 // echo "code1: " .$code;
 // echo "<img src='{$qrCodeUrl}'>";
 // echo $_SESSION['email'];
-
+// echo $_POST['otp'];
 //end test---------------------------------------
 if (!isset($_SESSION['failed'])) {
     $_SESSION['failed'] = false;
