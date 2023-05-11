@@ -45,7 +45,7 @@ if (!isset($_SESSION['failed'])) {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         //test
         $_SESSION['email'] = $email;
-        $_SESSION['password'] = $password;
+        // $_SESSION['password'] = $password;
         //end tesst
         // check password length if password is less then 8 character so
         if (strlen(trim($_POST['password'])) < 8) {
