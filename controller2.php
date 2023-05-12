@@ -165,11 +165,11 @@ if (!isset($_SESSION['failed'])) {
             $update_query = "UPDATE users SET status = '$update_status' , code = $update_code WHERE code = '$privatekey'";
             $update_result = mysqli_query($conn, $update_query);
 
-            if ($update_result) {
-                header('location: home.php');
-            } else {
-                $errors['db_error'] = "Không thể kết hợp dữ liệu trong cơ sở dữ liệu!";
-            }
+            // if ($update_result) {
+            //     header('location: home.php');
+            // } else {
+            //     $errors['db_error'] = "Không thể kết hợp dữ liệu trong cơ sở dữ liệu!";
+            // }
         } else {
             $errors['otp_error'] = "Mã xác minh không hợp lệ!";
         }
@@ -216,8 +216,8 @@ if (!isset($_SESSION['failed'])) {
     
             // $emailCheckQuery = "SELECT * FROM users WHERE email = '$email'";
             // $emailCheckResult = mysqli_query($conn, $emailCheckQuery);
-
-            $insertQuery = "UPDATE users SET code = '$privatekey' WHERE email = '$email'";
+            $status = "Chưa xác minh";
+            $insertQuery = "UPDATE users SET status = '$status',code = '$privatekey' WHERE email = '$email'";
             $insertInfo = mysqli_query($conn, $insertQuery);
             // Send Varification Code In Gmail
             if ($insertInfo) {
