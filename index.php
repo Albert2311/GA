@@ -30,16 +30,15 @@ include_once ("controller2.php");
 
 	// 	if(mysqli_num_rows($result) > 0){
 	// 		$row = mysqli_fetch_array($result);
-
-	// 		if($row['email'] == $email && $row['password'] == $password){
+    //         if($row['status'] == 'Đã xác minh'){
 	// 			// $_SESSION['admin_name'] = $row['fname'];
-	// 			header('location: loi.php');
+	// 			header('location: home.php');
 
-	// 		}elseif($row['email'] != $email){
+	// 		}elseif($row['status'] == 'Chưa xác minh'){
 	// 			// $_SESSION['admin_name'] = $row['fname'];
-	// 			header('location: loi.php');
+	// 			header('location: codeQR.php');
 	// 		}
-	// 	}else{
+	// }else{
 	// 		$error[] = 'Sai mật khẩu hoặc địa chỉ email';
 	// 	}
 	// };
@@ -64,7 +63,21 @@ include_once ("controller2.php");
     <!--//Style-CSS -->
 
     <script src="https://kit.fontawesome.com/af562a2a63.js" crossorigin="anonymous"></script>
-
+    <style>
+        #alert
+        {
+            height: auto;
+            width: 100%;
+            background: #ee05503b;
+            padding: 0 15px;
+            font-size: 19px;
+            line-height: 40px;
+            margin: 10px 0;
+            color: #000;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -85,15 +98,15 @@ include_once ("controller2.php");
                         
                         <form action="index.php" method="post" autocomplete="off">
                         <?php
-                            // if($errors > 0){
-                            //     foreach($errors AS $displayErrors){
-                            //     ?>
-                            //     <div id="alert">
-                            //         <?php echo $displayErrors ?>
-                            //     </div>
-                            //     <?php
-                            //     }
-                            // }
+                            if($errors > 0){
+                                foreach($errors AS $displayErrors){
+                                ?>
+                                <div id="alert">
+                                    <?php echo $displayErrors ?>
+                                </div>
+                                <?php
+                                }
+                            }
                             ?>
                             <input type="email" name="email" class="input" placeholder="Enter Your Email" required>
                             <input type="password" name="password" class="input" placeholder="Enter Your Password" style="margin-bottom: 2px;" required>

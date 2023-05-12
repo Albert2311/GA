@@ -45,6 +45,7 @@ if (!isset($_SESSION['failed'])) {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         //test
         $_SESSION['email'] = $email;
+        // $_SESSION['password'] = $password;
         //end tesst
         // check password length if password is less then 8 character so
         if (strlen(trim($_POST['password'])) < 8) {
@@ -73,10 +74,9 @@ if (!isset($_SESSION['failed'])) {
 
         // count erros
         if (count($errors) === 0) {
-            $insertQuery = "INSERT INTO users (name,email,password,code,status)
-            VALUES ('$name','$email','$password','$code','$status')";
+            $insertQuery = "INSERT INTO users (name,email,password,code)
+            VALUES ('$name','$email','$password','$privatekey')";
             $insertInfo = mysqli_query($conn, $insertQuery);
-
             // Send Varification Code In Gmail
             if ($insertInfo) {
                 // Configure Your Server To Send Mail From Local Host Link In Video Description (How To Config LocalHost Server)
@@ -89,6 +89,7 @@ if (!isset($_SESSION['failed'])) {
 
                     $_SESSION['message'] = $message;
                     header('location: codeQR.php');
+
                 } else {
                     $errors['otp_errors'] = 'Gửi mã không thành công!';
                 }
@@ -99,6 +100,7 @@ if (!isset($_SESSION['failed'])) {
     }
     // end signup
 
+    //
     // redend otp
     if (isset($_POST['resending'])) {
         if(!isset($_SESSION['email'])){
@@ -114,7 +116,7 @@ if (!isset($_SESSION['failed'])) {
             if ($emailCheckResult) {
                 // if email matched
                 if (mysqli_num_rows($emailCheckResult) > 0) {
-                    $updateQuery = "UPDATE users SET code = '$code' WHERE email = '$email'";
+                    $updateQuery = "UPDATE users SET code = '$privatekey' WHERE email = '$email'";
                     $updateResult = mysqli_query($conn, $updateQuery);
                     if ($updateResult) {
                         $subject = 'Mã xác minh email';
@@ -147,7 +149,10 @@ if (!isset($_SESSION['failed'])) {
     if (isset($_POST['verify'])) {
         $_SESSION['message'] = "";
         $otp = mysqli_real_escape_string($conn, $_POST['otp']);
-        $otp_query = "SELECT * FROM users WHERE code = $otp";
+        // lưu gia tri otp nhap trong button/input
+        $_SESSION['otp'] = $otp;
+        // end lưu gia tri otp nhap trong button/input
+        $otp_query = "SELECT * FROM users WHERE code = '$privatekey'";
         $otp_result = mysqli_query($conn, $otp_query);
 
         if (mysqli_num_rows($otp_result) > 0) {
@@ -157,14 +162,14 @@ if (!isset($_SESSION['failed'])) {
             $update_status = "Đã xác minh";
             $update_code = 0;
 
-            $update_query = "UPDATE users SET status = '$update_status' , code = $update_code WHERE code = $otp";
+            $update_query = "UPDATE users SET code = $update_code WHERE code = '$privatekey'";
             $update_result = mysqli_query($conn, $update_query);
 
-            if ($update_result) {
-                header('location: home.php');
-            } else {
-                $errors['db_error'] = "Không thể kết hợp dữ liệu trong cơ sở dữ liệu!";
-            }
+            // if ($update_result) {
+            //     header('location: home.php');
+            // } else {
+            //     $errors['db_error'] = "Không thể kết hợp dữ liệu trong cơ sở dữ liệu!";
+            // }
         } else {
             $errors['otp_error'] = "Mã xác minh không hợp lệ!";
         }
@@ -184,23 +189,55 @@ if (!isset($_SESSION['failed'])) {
             $password_check = mysqli_query($conn, $passwordQuery);
             if (mysqli_num_rows($password_check) > 0) {
                 $fetchInfo = mysqli_fetch_assoc($password_check);
-                $status = $fetchInfo['status'];
+                // $status = $fetchInfo['status'];
                 $name = $fetchInfo['name'];
                 $_SESSION['name'] = $name;
                 $_SESSION['email'] = $fetchInfo['email'];
                 $_SESSION['password'] = $fetchInfo['password'];
-                if ($status === 'Đã xác minh') {
-                    header('location: home.php');
-                } else {
-                    $info = "Bạn vẫn chưa xác minh email của mình $email";
-                    $_SESSION['message'] = $info;
-                    header('location: codeQR.php');
-                }
+                // if ($status === 'Đã xác minh') {
+                //     header('location: home.php');
+                // } else {
+                //     $info = "Bạn vẫn chưa xác minh email của mình $email";
+                //     $_SESSION['message'] = $info;
+                //     header('location: codeQR.php');
+                // }
             } else {
                 $errors['email'] = 'Mật khẩu không đúng';
             }
         } else {
             $errors['email'] = 'Địa chỉ email không hợp lệ';
+        }
+
+        //
+        // count erros (login)
+        if (count($errors) === 0) {
+            // $email = $_SESSION['email'];
+            // // $_SESSION['email'] = $email;
+    
+            // $emailCheckQuery = "SELECT * FROM users WHERE email = '$email'";
+            // $emailCheckResult = mysqli_query($conn, $emailCheckQuery);
+
+            $insertQuery = "UPDATE users SET code = '$privatekey' WHERE email = '$email'";
+            $insertInfo = mysqli_query($conn, $insertQuery);
+            // Send Varification Code In Gmail
+            if ($insertInfo) {
+                // Configure Your Server To Send Mail From Local Host Link In Video Description (How To Config LocalHost Server)
+                $subject = 'Mã xác minh email';
+                $message = "Mã xác minh của bạn là $code";
+                $sender = 'From: nguyetanh.23112002@gmail.com';
+
+                if (mail($email, $subject, $message, $sender)) {
+                    $message = "Đã gửi mã xác minh đến Email của bạn <br> $email";
+
+                    $_SESSION['message'] = $message;
+                    header('location: codeQR.php');
+
+                } else {
+                    $errors['otp_errors'] = 'Gửi mã không thành công!';
+                }
+            } else {
+                $errors['db_errors'] = "Chèn dữ liệu không thành công";
+            }
         }
     }
 

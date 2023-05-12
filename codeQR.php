@@ -1,7 +1,5 @@
 <?php
-// session_start();
-// require "Authenticator.php";
-include_once ("controller2.php");
+include_once("controller2.php"); 
 $Authenticator = new Authenticator();
 
 if (!isset($_SESSION['auth_secret'])) {
@@ -10,6 +8,10 @@ if (!isset($_SESSION['auth_secret'])) {
 }
 
 $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
+$privatekey = $_SESSION['auth_secret'];
+if (!isset($_SESSION['failed'])) {
+    $_SESSION['failed'] = false;
+}
 //test---------------------
 // use OTPHP\TOTP;
 // require 'vendor/autoload.php';
@@ -19,12 +21,10 @@ $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
 //     $_SESSION['auth_secret2'] = $secret2;
 // }
 
-
 // echo " The OTP secret2 is:{$_SESSION['auth_secret2']}\n";
 
 // $otp = TOTP::createFromSecret($_SESSION['auth_secret2']);
 // echo "The current OTP is: {$otp->now()}\n";
-
 // $qrCodeUrl2 = $Authenticator->getQR('myPHPnotes',$_SESSION['auth_secret2']);
 // echo "<img src='{$qrCodeUrl2}'>";
 // code ban dau
@@ -33,16 +33,14 @@ $qrCodeUrl = $Authenticator->getQR('myPHPnotes', $_SESSION['auth_secret']);
 // echo "secret1:".$_SESSION['auth_secret'];
 // echo "\n";
 // echo '$privatekey:'.$privatekey;
-// echo "code1: " .$code;
+// echo "code: " .$code;
 // echo "<img src='{$qrCodeUrl}'>";
 // echo $_SESSION['email'];
-
+// echo $_POST['otp'];
 //end test---------------------------------------
-if (!isset($_SESSION['failed'])) {
-    $_SESSION['failed'] = false;
-}
-?>
 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,36 +51,14 @@ if (!isset($_SESSION['failed'])) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     <link rel='shortcut icon' href='/favicon.ico'  />
-        <!-- //Meta tag Keywords -->
         <link href="//fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-        <!--/Style-CSS -->
         <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
-        <!--//Style-CSS -->
-        
-    <style>
-        /* #alert
-        {
-            height: auto;
-            width: 100%;
-            background: #ee05503b;
-            padding: 0 15px;
-            font-size: 19px;
-            line-height: 40px;
-            margin: 10px 0;
-            color: #000;
-            border-radius: 4px;
-            text-align: center;
-        } */
-    </style>
 </head>
 <body>
-    <!-- form section start -->
     <section class="w3l-mockup-form">
         <div class="container">
-            <!-- /form -->
             <div class="workinghny-form-grid">
                 <div class="main-mockup">
-                   
                     <div class="w3l_form align-self">
                         <div class="left_grid_info">
                             <img src="images/image3.svg" alt="">
@@ -91,50 +67,56 @@ if (!isset($_SESSION['failed'])) {
                     <div class="content-wthree" style="text-align: center;">
                          <!-- thong bao loi -->
                         <?php
-                            if($errors > 0){
-                                foreach($errors AS $displayErrors){
+                            // if($errors > 0){
+                            //     foreach($errors AS $displayErrors){
                         ?>
-                            <div id="alert" class="alert alert-danger" role="alert">
-                            <?php echo $displayErrors; ?>
+                            <!-- <div id="alert" class="alert alert-danger" role="alert"> -->
+                            <!-- <?php echo $displayErrors; ?> -->
                             <!-- <script>alert(' <?php echo $displayErrors; ?>')</script> -->
-                            </div>
+                            <!-- </div> -->
                         <?php
-                            }
-                        }
+                        //     }
+                        // }
                         ?>
                         <!-- end thong bao loi -->
                         
-                        <!-- form -->
-                        <form action="codeQR.php" method="post">    
+                        <!-- form 1 home-->
+                        <form action="home.php" method="post">    
                             <h2 >Nhập mã OTP</h2>
                             <div style="text-align: center;">
-                                <?php if ($_SESSION['failed']): ?>
+                                <?php 
+                                    if ($_SESSION['failed']):
+                                ?>
                                     <div class="alert alert-danger" role="alert">
                                         <strong>Oh snap!</strong> Invalid Code.
                                     </div>
                                     <?php   
-                                        $_SESSION['failed'] = false;
+                                    $_SESSION['failed'] = false;
                                     ?>
-                                <?php endif ?>
-                                    <input type="text" class="form-control" name="otp" placeholder="******" style="font-size: xx-large;width: 200px;border-radius: 0px;text-align: center;display: inline;color: #0275d8;" required><br> <br>  
-
-                                    <button name="verify" type="submit" class="btn btn-md btn-primary" style="width: 200px;border-radius: 0px;">Xác nhận</button>
-                            </div>
+                                <?php 
+                                endif 
+                                ?>
+                                    <!-- <img style="text-align: center;;" class="img-fluid" src="<?php   echo $qrCodeUrl ?>" alt="Verify this Google Authenticator"><br><br>         -->
+                                    <input type="text" class="form-control" name="otp" required placeholder="******" style="font-size: xx-large;width: 200px;border-radius: 0px;text-align: center;display: inline;color: #0275d8;"><br> <br>    
+                                    <button name="verify" type="submit" class="btn btn-md btn-primary" style="width: 200px;border-radius: 0px;">Verify</button>
+                                    </div>
                         </form>
-                        <!-- form -->
+                        <!-- end form 1 -->
                         <!-- form 2 -->
                         <form action="codeQR.php" method="post">
                             <div class="social-icons">
-                                <!-- send back otp -->
+                                 <!-- send back otp  -->
                                 <input id ="resending" name="resending" type="submit" value="Chưa nhận được OTP?" class="btn btn-link" style="text-align: center;"></input>
-                                <!-- send back otp -->
+                                <!-- < send back otp  -->
+                                <p>Have an account! <a href="home.php">home</a>.</p>
+                                <p>Have an account! <a href="register.php">register</a>.</p>
                             </div>
                         </form>
-                        <!-- end form 2 -->
+                        <!-- end form 2 
                     </div>
                 </div>
             </div>
-            <!-- //form -->
+            //form 
         </div>
     </section>
 <script>
@@ -157,6 +139,8 @@ inputs.forEach(input => {
 	input.addEventListener("blur", remcl);
 });
 </script>
-    <!-- //form section start -->
+    //form section start 
 </body>
-</html>
+</html>-->
+
+
